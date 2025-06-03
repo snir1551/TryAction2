@@ -46,7 +46,7 @@ jobs:
     - name: Start App on Port 3000
       working-directory: backend
       run: |
-        npm start &
+        npm run start &
         echo "Waiting for server..."
         sleep 5
 
