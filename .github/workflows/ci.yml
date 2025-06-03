@@ -53,3 +53,26 @@ jobs:
     - name: Check Service Availability (localhost:3000)
       run: |
         curl --fail http://localhost:3000 || echo "Service check failed on localhost:3000"
+
+
+    - name: Notify Slack on Success
+      if: success()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": " *Job `${{ github.job }}` succeeded!*\n• Repo: `${{ github.repository }}`\n• Branch: `${{ github.ref_name }}`\n• Actor: `${{ github.actor }}`"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify Slack on Failure
+      if: failure()
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        payload: |
+          {
+            "text": " *Job `${{ github.job }}` failed!*\n• Repo: `${{ github.repository }}`\n• Branch: `${{ github.ref_name }}`\n• Actor: `${{ github.actor }}`"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
