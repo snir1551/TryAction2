@@ -9,4 +9,8 @@ describe('Math functions', () => {
   it('should handle negative numbers', () => {
     expect(sum(-1, 5)).toBe(4);
   });
+
+  it('should handle negative numbers', () => {
+    expect(sum(-1, 5)).toBe(4);
+  });
 });
