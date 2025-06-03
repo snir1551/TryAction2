@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - "**"
+    paths:
+      - 'backend/**'
   pull_request:
     branches:
       - "**"
+    paths:
+      - 'backend/**'
 
 jobs:
   build-and-test:
