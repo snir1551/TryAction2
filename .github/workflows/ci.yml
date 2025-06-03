@@ -38,7 +38,7 @@ jobs:
       run: npm test > test-report.txt
 
     - name: Upload Test Report Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-report-${{ matrix.node-version }}
         path: backend/test-report.txt
