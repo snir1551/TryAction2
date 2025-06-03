@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - "**"
-    paths:
-      - 'backend/**'
   pull_request:
     branches:
       - "**"
-    paths:
-      - 'backend/**'
+    
 
 jobs:
   build-and-test:
@@ -38,4 +35,21 @@ jobs:
 
     - name: Run Tests
       working-directory: backend
-      run: npm test
+      run: npm test > test-report.txt
+
+    - name: Upload Test Report Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-report-${{ matrix.node-version }}
+        path: backend/test-report.txt
+
+    - name: Start App on Port 3000
+      working-directory: backend
+      run: |
+        npm start &
+        echo "Waiting for server..."
+        sleep 5
+
+    - name: Check Service Availability (localhost:3000)
+      run: |
+        curl --fail http://localhost:3000 || echo "Service check failed on localhost:3000"
