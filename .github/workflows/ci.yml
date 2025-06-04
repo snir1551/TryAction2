@@ -30,7 +30,7 @@ jobs:
       run: node --version
 
     - name: Install Dependencies
-      working-directory: backend
+      working-directory: week5_practice/backend
       run: npm install
 
     - name: Run Tests
