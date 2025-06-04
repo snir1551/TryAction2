@@ -34,17 +34,17 @@ jobs:
       run: npm install
 
     - name: Run Tests
-      working-directory: backend
+      working-directory: week5_practice/backend
       run: npm test -- --no-color > test-report.txt
 
     - name: Upload Test Report Artifact
       uses: actions/upload-artifact@v4
       with:
         name: test-report-${{ matrix.node-version }}
-        path: backend/test-report.txt
+        path: week5_practice/backend/test-report.txt
 
     - name: Start App on Port 3001
-      working-directory: backend
+      working-directory: week5_practice/backend
       run: |
         npm run start &
         echo "Waiting for server..."
@@ -104,21 +104,21 @@ jobs:
       run: node --version
 
     - name: Install Dependencies
-      working-directory: frontend
+      working-directory: week5_practice/frontend
       run: npm install
 
     - name: Run Tests
-      working-directory: frontend
+      working-directory: week5_practice/frontend
       run: npm test -- --no-color > test-report.txt
 
     - name: Upload Test Report Artifact
       uses: actions/upload-artifact@v4
       with:
         name: test-report-${{ matrix.node-version }}
-        path: backend/test-report.txt
+        path: week5_practice/frontend/test-report.txt
 
     - name: Start App on Port 3000
-      working-directory: frontend
+      working-directory: week5_practice/frontend
       run: |
         npm run start &
         echo "Waiting for server..."
