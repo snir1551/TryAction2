@@ -57,7 +57,7 @@ jobs:
 
     - name: Notify Slack on Success
       if: success()
-      uses: slackapi/slack-github-action@v1.24.0
+      uses: slackapi/slack-github-action@v1.25.0
       with:
         payload: |
           {
@@ -68,7 +68,7 @@ jobs:
 
     - name: Notify Slack on Failure
       if: failure()
-      uses: slackapi/slack-github-action@v1.24.0
+      uses: slackapi/slack-github-action@v1.25.0
       with:
         payload: |
           {
@@ -78,7 +78,7 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Slack Manual Test
-      uses: slackapi/slack-github-action@v1.24.0
+      uses: slackapi/slack-github-action@v1.25.0
       with:
         payload: '{"text": "🚀 This is a manual Slack test from Snir!"}'
       env:
