@@ -37,10 +37,10 @@ jobs:
       working-directory: week5_practice/backend
       run: npm test -- --no-color > test-report.txt
 
-    - name: Upload Test Report Artifact
+    - name: Upload Backend Test Report
       uses: actions/upload-artifact@v4
       with:
-        name: test-report-${{ matrix.node-version }}
+        name: backend-test-report-${{ matrix.node-version }}
         path: week5_practice/backend/test-report.txt
 
     - name: Start App on Port 3001
@@ -111,10 +111,10 @@ jobs:
       working-directory: week5_practice/frontend
       run: npm test -- --no-color > test-report.txt
 
-    - name: Upload Test Report Artifact
+    - name: Upload Frontend Test Report
       uses: actions/upload-artifact@v4
       with:
-        name: test-report-${{ matrix.node-version }}
+        name: frontend-test-report-${{ matrix.node-version }}
         path: week5_practice/frontend/test-report.txt
 
     - name: Start App on Port 3000
