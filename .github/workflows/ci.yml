@@ -10,7 +10,7 @@ on:
         
   
 jobs:
-  build-and-test:
+  backend:
     runs-on: ubuntu-latest
 
     strategy:
@@ -43,8 +43,82 @@ jobs:
         name: test-report-${{ matrix.node-version }}
         path: backend/test-report.txt
 
-    - name: Start App on Port 3000
+    - name: Start App on Port 3001
       working-directory: backend
+      run: |
+        npm run start &
+        echo "Waiting for server..."
+        sleep 5
+
+    - name: Check Service Availability (localhost:3001)
+      run: |
+        curl --fail http://localhost:3001 || echo "Service check failed on localhost:3001"
+
+
+    - name: Notify Slack on Success
+      if: success()
+      uses: slackapi/slack-github-action@v1.25.0
+      with:
+        payload: |
+          {
+            "text": " *Job `${{ github.job }}` succeeded!*\n• Repo: `${{ github.repository }}`\n• Branch: `${{ github.ref_name }}`\n• Actor: `${{ github.actor }}`"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify Slack on Failure
+      if: failure()
+      uses: slackapi/slack-github-action@v1.25.0
+      with:
+        payload: |
+          {
+            "text": " *Job `${{ github.job }}` failed!*\n• Repo: `${{ github.repository }}`\n• Branch: `${{ github.ref_name }}`\n• Actor: `${{ github.actor }}`"
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Slack Manual Test
+      uses: slackapi/slack-github-action@v1.25.0
+      with:
+        payload: '{"text": " This is a manual Slack test from Snir!"}'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Check Node.js Version
+      run: node --version
+
+    - name: Install Dependencies
+      working-directory: frontend
+      run: npm install
+
+    - name: Run Tests
+      working-directory: frontend
+      run: npm test -- --no-color > test-report.txt
+
+    - name: Upload Test Report Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report-${{ matrix.node-version }}
+        path: backend/test-report.txt
+
+    - name: Start App on Port 3000
+      working-directory: frontend
       run: |
         npm run start &
         echo "Waiting for server..."
